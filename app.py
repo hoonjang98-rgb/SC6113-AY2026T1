@@ -1,12 +1,19 @@
-# my first DAPP v2
 
 from flask import Flask, render_template, request
 
-app = Flask (__name__)
+app = Flask(__name__)
 
-@app.route("/",methods=["GET","POST"])
+@app.route("/", methods=["GET", "POST"])
 def index():
     return(render_template("index.html"))
 
-if __name__== "__main__":
+@app.route("/main", methods=["GET", "POST"])
+def main():
+    return(render_template("main.html"))
+
+@app.route("/transferMoney", methods=["GET", "POST"])
+def transferMoney():
+    return(render_template("transferMoney.html"))
+
+if __name__ == "__main__":
     app.run()
