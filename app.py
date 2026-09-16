@@ -1,4 +1,4 @@
-# my first DAPP
+# my first DAPP v2
 
 from flask import Flask, render_template, request
 
