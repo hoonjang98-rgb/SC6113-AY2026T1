@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
@@ -9,9 +11,19 @@
 
         <input type="text" id="payer" placeholder="Enter payer Address">
         <input type="text" id="payee" placeholder="Enter payee Address">
-        <input type="number" id="amount" placeholder="Enter amount">
+        <input type="number" id="amount" placeholder="Enter amount" step="1" min="1">
 
         <button type="button" class="btn" onclick="transfer()">Transfer</button>
+
+        <button type="button" class="btn" onclick="transaction()">
+            View Transaction
+        </button>
+
+        <div class="transaction-info">
+            <p id="view_payer"></p>
+            <p id="view_payee"></p>
+            <p id="view_amount"></p>
+        </div>
 
         <form action="/main" method="post">
             <input type="submit" value="Main">
@@ -72,10 +84,32 @@
             }
         ];
 
+        const web3 = new Web3(Web3.givenProvider);
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+
         async function transfer() {
             try {
                 if (!window.ethereum) {
-                    alert("MetaMask가 필요합니다.");
+                    alert("MetaMask를 설치하거나 활성화해 주세요.");
+                    return;
+                }
+
+                const payer = document.getElementById("payer").value.trim();
+                const payee = document.getElementById("payee").value.trim();
+                const amount = document.getElementById("amount").value.trim();
+
+                if (!payer || !payee || !amount) {
+                    alert("payer, payee, amount를 모두 입력해 주세요.");
+                    return;
+                }
+
+                if (!web3.utils.isAddress(payer) || !web3.utils.isAddress(payee)) {
+                    alert("올바른 지갑 주소를 입력해 주세요.");
+                    return;
+                }
+
+                if (!/^[0-9]+$/.test(amount) || BigInt(amount) <= 0n) {
+                    alert("금액은 1 이상의 정수로 입력해 주세요.");
                     return;
                 }
 
@@ -83,15 +117,8 @@
                     method: "eth_requestAccounts"
                 });
 
-                const payer = document.getElementById("payer").value;
-                const payee = document.getElementById("payee").value;
-                const amount = document.getElementById("amount").value;
-
-                const web3 = new Web3(window.ethereum);
-                const contract = new web3.eth.Contract(
-                    contractABI,
-                    contractAddress
-                );
+                console.log(payer, payee, amount);
+                console.log("accounts[0]", accounts[0]);
 
                 await contract.methods.transfer(
                     payer,
@@ -104,7 +131,27 @@
                 alert("Transfer completed.");
             } catch (error) {
                 console.error(error);
-                alert(error.message);
+                alert(error.message || "송금 중 오류가 발생했습니다.");
+            }
+        }
+
+        async function transaction() {
+            try {
+                const result = await contract.methods.transaction().call();
+
+                document.getElementById("view_payer").innerText =
+                    "Payer: " + result[0];
+
+                document.getElementById("view_payee").innerText =
+                    "Payee: " + result[1];
+
+                document.getElementById("view_amount").innerText =
+                    "Amount: " + result[2];
+
+                console.log(result[0], result[1], result[2]);
+            } catch (error) {
+                console.error(error);
+                alert(error.message || "거래 내역을 불러오는 중 오류가 발생했습니다.");
             }
         }
     </script>
