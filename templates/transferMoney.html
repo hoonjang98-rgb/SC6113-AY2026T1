@@ -6,23 +6,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Transfer Money</title>
 </head>
-
 <body>
     <div class="container">
         <h2>Transfer Money</h2>
 
-        <input type="text" id="payer" placeholder="Enter payer address">
-        <input type="text" id="payee" placeholder="Enter payee address">
-        <input type="number" id="amount" placeholder="Enter amount" step="1" min="1">
+        <input id="payer" placeholder="Enter payer address">
+        <input id="payee" placeholder="Enter payee address">
+        <input id="amount" type="number" min="1" step="1" placeholder="Enter amount">
 
         <button type="button" class="btn" onclick="transfer()">Transfer</button>
-        <button type="button" class="btn" onclick="transaction()">View Transaction</button>
-
-        <div class="transaction-info">
-            <p id="view_payer"></p>
-            <p id="view_payee"></p>
-            <p id="view_amount"></p>
-        </div>
 
         <form action="/main" method="post">
             <input type="submit" value="Main">
@@ -30,127 +22,57 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-
     <script>
         const contractAddress = "0x5bb9cd5e5cdfc630082afbdd17a229d4d7d2da89";
 
-        const contractABI = [
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "payer_add",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "payee_add",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "amount_transfer",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "transfer",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "transaction",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ];
-
-        const web3 = new Web3(Web3.givenProvider);
-        const contract = new web3.eth.Contract(contractABI, contractAddress);
+        const contractABI = [{
+            "inputs": [
+                {"name": "payer_add", "type": "address"},
+                {"name": "payee_add", "type": "address"},
+                {"name": "amount_transfer", "type": "uint256"}
+            ],
+            "name": "transfer",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }];
 
         async function transfer() {
             try {
-                if (!window.ethereum) {
-                    alert("Please install or enable MetaMask.");
-                    return;
-                }
+                if (!window.ethereum) throw new Error("MetaMask was not detected.");
+                if (typeof Web3 === "undefined") throw new Error("Web3.js did not load.");
 
-                const payer = document.getElementById("payer").value.trim();
-                const payee = document.getElementById("payee").value.trim();
-                const amount = document.getElementById("amount").value.trim();
-
-                if (!payer || !payee || !amount) {
-                    alert("Please enter the payer address, payee address, and amount.");
-                    return;
-                }
-
-                if (!web3.utils.isAddress(payer) || !web3.utils.isAddress(payee)) {
-                    alert("Please enter valid wallet addresses.");
-                    return;
-                }
-
-                if (!/^[0-9]+$/.test(amount) || BigInt(amount) <= 0n) {
-                    alert("Please enter a positive whole number for the amount.");
-                    return;
-                }
-
+                const web3 = new Web3(window.ethereum);
                 const accounts = await window.ethereum.request({
                     method: "eth_requestAccounts"
                 });
 
-                console.log(payer, payee, amount);
-                console.log("Connected account:", accounts[0]);
+                const payer = document.getElementById("payer").value.trim();
+                const payee = document.getElementById("payee").value.trim();
+                const amount = document.getElementById("amount").value;
 
-                await contract.methods.transfer(
-                    payer,
-                    payee,
-                    amount
-                ).send({
-                    from: accounts[0]
-                });
+                if (!web3.utils.isAddress(payer) || !web3.utils.isAddress(payee)) {
+                    throw new Error("Enter valid wallet addresses.");
+                }
+                if (!/^[1-9][0-9]*$/.test(amount)) {
+                    throw new Error("Enter a positive whole-number amount.");
+                }
+
+                const code = await web3.eth.getCode(contractAddress);
+                if (code === "0x") {
+                    throw new Error("Contract not found on the selected network.");
+                }
+
+                const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+                alert("Confirm the transaction in MetaMask.");
+                await contract.methods.transfer(payer, payee, amount)
+                    .send({ from: accounts[0] });
 
                 alert("Transfer completed.");
             } catch (error) {
                 console.error(error);
-                alert(error.message || "An error occurred during the transfer.");
-            }
-        }
-
-        async function transaction() {
-            try {
-                const result = await contract.methods.transaction().call();
-
-                document.getElementById("view_payer").innerText =
-                    "Payer: " + result[0];
-
-                document.getElementById("view_payee").innerText =
-                    "Payee: " + result[1];
-
-                document.getElementById("view_amount").innerText =
-                    "Amount: " + result[2];
-
-                console.log(result[0], result[1], result[2]);
-            } catch (error) {
-                console.error(error);
-                alert(error.message || "An error occurred while loading the transaction.");
+                alert(error.message || "Transfer failed.");
             }
         }
     </script>
