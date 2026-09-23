@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Transfer Money</title>
 </head>
 
 <body>
     <div class="container">
         <h2>Transfer Money</h2>
 
-        <input type="text" id="payer" placeholder="Enter payer Address">
-        <input type="text" id="payee" placeholder="Enter payee Address">
+        <input type="text" id="payer" placeholder="Enter payer address">
+        <input type="text" id="payee" placeholder="Enter payee address">
         <input type="number" id="amount" placeholder="Enter amount" step="1" min="1">
 
         <button type="button" class="btn" onclick="transfer()">Transfer</button>
-
-        <button type="button" class="btn" onclick="transaction()">
-            View Transaction
-        </button>
+        <button type="button" class="btn" onclick="transaction()">View Transaction</button>
 
         <div class="transaction-info">
             <p id="view_payer"></p>
@@ -90,7 +89,7 @@
         async function transfer() {
             try {
                 if (!window.ethereum) {
-                    alert("MetaMask를 설치하거나 활성화해 주세요.");
+                    alert("Please install or enable MetaMask.");
                     return;
                 }
 
@@ -99,17 +98,17 @@
                 const amount = document.getElementById("amount").value.trim();
 
                 if (!payer || !payee || !amount) {
-                    alert("payer, payee, amount를 모두 입력해 주세요.");
+                    alert("Please enter the payer address, payee address, and amount.");
                     return;
                 }
 
                 if (!web3.utils.isAddress(payer) || !web3.utils.isAddress(payee)) {
-                    alert("올바른 지갑 주소를 입력해 주세요.");
+                    alert("Please enter valid wallet addresses.");
                     return;
                 }
 
                 if (!/^[0-9]+$/.test(amount) || BigInt(amount) <= 0n) {
-                    alert("금액은 1 이상의 정수로 입력해 주세요.");
+                    alert("Please enter a positive whole number for the amount.");
                     return;
                 }
 
@@ -118,7 +117,7 @@
                 });
 
                 console.log(payer, payee, amount);
-                console.log("accounts[0]", accounts[0]);
+                console.log("Connected account:", accounts[0]);
 
                 await contract.methods.transfer(
                     payer,
@@ -131,7 +130,7 @@
                 alert("Transfer completed.");
             } catch (error) {
                 console.error(error);
-                alert(error.message || "송금 중 오류가 발생했습니다.");
+                alert(error.message || "An error occurred during the transfer.");
             }
         }
 
@@ -151,7 +150,7 @@
                 console.log(result[0], result[1], result[2]);
             } catch (error) {
                 console.error(error);
-                alert(error.message || "거래 내역을 불러오는 중 오류가 발생했습니다.");
+                alert(error.message || "An error occurred while loading the transaction.");
             }
         }
     </script>
