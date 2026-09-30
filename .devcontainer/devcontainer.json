@@ -6,7 +6,10 @@
       "version": "24"
     }
   },
-  "postCreateCommand": "python -m pip install -r requirements.txt",
+  "postCreateCommand": {
+    "python": "python -m pip install -r requirements-chain.txt",
+    "node": "npx --yes pnpm@11.19.0 install --frozen-lockfile --ignore-scripts"
+  },
   "forwardPorts": [
     5000
   ],
@@ -17,4 +20,3 @@
     }
   }
 }
-

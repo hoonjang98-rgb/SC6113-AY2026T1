@@ -76,11 +76,12 @@ Deposit에서 100 저장 → Transfer에서 지갑 연결 → 다른 주소로 3
 
 ## 4. GitHub Codespaces
 
-저장소의 `codex/full-review-fixes` 브랜치를 선택합니다. 이미 생성한 Codespace라면 변경 사항을 먼저 보관한 뒤:
+리뷰 수정은 main에 병합되었습니다. 이미 생성한 Codespace라면 변경 사항을 먼저 보관한 뒤:
 
 ```bash
 git fetch origin
-git switch codex/full-review-fixes
+git switch main
+git pull --ff-only origin main
 python -m pip install -r requirements.txt
 cp -n .env.example .env
 python -m flask --app app run --host=0.0.0.0 --port=5000
@@ -88,12 +89,44 @@ python -m flask --app app run --host=0.0.0.0 --port=5000
 
 Ports 탭의 **5000**을 Open in Browser로 엽니다. 포트는 기본 private 상태로 유지할 수 있습니다.
 지갑 사용 시 VS Code 내부 미리보기 대신 MetaMask가 설치된 외부 브라우저에서 여세요.
-`.devcontainer/devcontainer.json`은 Python 3.12, Node 24, Flask 의존성 설치 및 5000 포트 포워딩을 설정합니다.
+`.devcontainer/devcontainer.json`은 Python 3.12, Node 24, 실행·배포 의존성 설치 및 5000 포트 포워딩을 설정합니다.
 기존 Codespace에는 컨테이너 재빌드 시 적용됩니다.
 
 Codespaces를 연결하는 것만으로 Solidity가 배포되거나 MetaMask와 같은 체인에 연결되는 것은 아닙니다.
 위 3번의 배포 및 `.env` 설정도 필요합니다.
 서버를 다시 시작해도 블록체인 기록은 해당 체인의 상태에 남습니다.
+
+## 로컬 실습 체인 실행과 자동 배포
+
+[로컬 체인 안내](docs/local-chain.md)의 절차로 Remix VM 외부에 Anvil 체인을 실행할 수 있습니다.
+체인을 실행하는 PC에서 다음 순서로 진행합니다.
+
+```bash
+npx --yes pnpm@11.19.0 install --frozen-lockfile --ignore-scripts
+```
+
+첫 번째 터미널:
+
+```bash
+npm run chain
+```
+
+두 번째 터미널에서 가상환경 Python을 사용하여:
+
+```bash
+python -m pip install -r requirements-chain.txt
+python tools/deploy_local.py --install --write-env
+python -m flask --app app run --port=5000
+```
+
+Windows에서는 위 `python` 대신 `.venv/Scripts/python.exe`, Linux에서는 `.venv/bin/python`을 사용할 수 있습니다.
+배포 도구는 로컬 Anvil(체인 ID 31337)에만 연결하며, 계약 주소와 체인 ID를 .env에 반영합니다.
+같은 계약이 이미 배포되어 있으면 주소를 재사용합니다. 상태는 `.cache/anvil-state.json`에 주기적으로 저장됩니다.
+Remix에서 로컬 Anvil로 직접 배포한 계약은 `--address 0x배포주소 --write-env`로 검증 후 설정할 수 있습니다.
+
+Codespaces의 웹앱과 PC의 로컬 체인을 함께 사용할 수도 있습니다.
+이때 Codespaces의 .env에는 PC에서 배포한 주소·체인 ID를 입력하고, PC 브라우저의 지갑은 `http://127.0.0.1:8545`에 연결합니다.
+Codespaces의 localhost와 PC의 localhost는 서로 다르므로, 로컬 체인 RPC를 어느 컴퓨터에서 실행했는지 확인하세요.
 
 ## 5. 자동 검증
 
