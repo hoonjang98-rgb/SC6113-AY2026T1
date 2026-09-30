@@ -1,0 +1,12 @@
+{
+  "name": "sc6113-course-dapp",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/dapp.test.cjs",
+    "test:browser": "node tests/browser.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
+
