@@ -3,10 +3,11 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/dapp.test.cjs",
-    "test:browser": "node tests/browser.test.cjs"
+    "test:browser": "node tests/browser.test.cjs",
+    "chain": "node tools/run_chain.cjs"
   },
   "devDependencies": {
+    "@foundry-rs/anvil": "1.7.1",
     "playwright": "1.62.1"
   }
 }
-
