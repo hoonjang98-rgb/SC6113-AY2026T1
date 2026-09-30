@@ -83,4 +83,3 @@ if __name__ == "__main__":
     print(json.dumps(record, indent=2))
     if args.write_env:
         print("Public DApp settings written to .env. Restart Flask to load them.")
-
