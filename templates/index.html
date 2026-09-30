@@ -1,16 +1,13 @@
-<head>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}">
-</head>
-
-<body>
-    <div class="container">
-        <h2>Main</h2>
-        <form action="/transferMoney" method="post">
-            <input type = "submit" value="Transfer Money">
-        </form>
-        <form action="/" method="post">
-            <input type = "submit" value="Exit">
-        </form>
-    </div>
-</body>
+{% extends "base.html" %}
+{% block content %}
+<h1>Course DApp</h1>
+<p>Choose a contract operation. Connect MetaMask on the configured network when prompted.</p>
+<div class="actions">
+    <a class="button" href="{{ url_for('transferMoney') }}">Transfer Money</a>
+    <a class="button" href="{{ url_for('deposit') }}">Deposit Record</a>
+</div>
+<p class="note">CourseLedger uses simulated whole-number credits, not real money or ETH. Anyone can create their own demo credits through Deposit. Transactions require network gas.</p>
+{% if not dapp_config.chainId or not dapp_config.transferAddress or not dapp_config.depositAddress %}
+<p class="notice">Contract setup is incomplete. Set CHAIN_ID and the required contract addresses in .env, then restart the server. See README.md.</p>
+{% endif %}
+{% endblock %}
