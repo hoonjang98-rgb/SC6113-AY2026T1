@@ -2,6 +2,14 @@ node_modules/
 .pnpm-store/
 .venv/
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.sqlite*
+*.db
 __pycache__/
 evidence/
 *.log

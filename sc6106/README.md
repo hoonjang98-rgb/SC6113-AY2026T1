@@ -14,7 +14,7 @@ The browser validates Sepolia chain ID 11155111, exact wei amounts, account chan
 
 ## Local development and checks
 
-Python 3.11+ and Node 20+ are suitable. Install Python requirements in a virtual environment. JavaScript development dependencies are pinned in `pnpm-lock.yaml`.
+Python 3.12+ and Node 20+ are suitable. Install Python requirements in a virtual environment. Python packages are pinned with PyPI SHA-256 hashes; JavaScript dependencies are pinned in `pnpm-lock.yaml`. Installation lifecycle scripts are disabled in `pnpm-workspace.yaml`.
 
 ```text
 python -m pip install -r requirements.txt
@@ -36,12 +36,18 @@ Create a new Python web service from `hoonjang98-rgb/SC6113-AY2026T1`, branch `c
 1. Open `/setup` in a browser with an Ethereum wallet, unlock it, and select Ethereum Sepolia with enough test ETH for deployment gas.
 2. Deploy Store contract, review the network and code hash, and confirm in the wallet. No ETH value is sent with deployment; gas is required.
 3. Record the confirmed public deployment JSON in `static/deployment.json`, publish that change to the deployment branch, and wait for Render to redeploy.
-4. Verify the runtime code matches the artifact before testing a small Store deposit and withdrawal. Do not describe local Ganache tests as Sepolia transactions.
+4. Verify the runtime code matches the artifact before testing a small Store deposit and withdrawal. Local EthereumJS EVM tests are simulations, not public Sepolia transactions.
 
 When deployment.json has a null address, Store and Transaction intentionally report that setup is unfinished. Transfer Money does not depend on the Store deployment. The public setup page cannot change the shared deployment configuration.
 
 ## Contract scope
 
-Solidity 0.8.30, optimizer 200, Shanghai EVM. No administrator, upgrades, emergency withdrawal, or arbitrary target calls. Deposits reject zero/self beneficiary and zero value. Direct ETH transfers revert. Withdrawals use checks-effects-interactions and a reentrancy guard. Failed recipient payments revert balances and history. Forced ETH can exceed accounted balances and is not assigned to any wallet. This is a classroom testnet contract; it has not received an independent audit.
+Solidity 0.8.39, optimizer 200, Shanghai EVM. Deployment rejects chains other than Sepolia. No administrator, upgrades, emergency withdrawal, or arbitrary target calls. Deposits reject zero/self beneficiary and zero value. Direct ETH transfers revert. Withdrawals use checks-effects-interactions and a reentrancy guard. Failed recipient payments revert balances and history. Forced ETH can exceed accounted balances and is not assigned to any wallet. This is a classroom testnet contract; it has not received an independent audit.
+
+## Privacy and security checks
+
+The app has no login, database, analytics, cookies, private-key field, token approval, message signing, or file upload. Wallet signing remains in the extension. Address lookup navigation uses a URL fragment, then removes it from browser history; it is not sent to Render in the request URL. The app sends read requests to the documented public RPC services, which can observe the requesting IP and address. Ethereum transactions and beneficiary balances are public, not confidential.
+
+See `SECURITY_REVIEW.md` for the dated scope and remaining limits. Run `node tools/dependency-audit.cjs` to query installed packages, including bundled dependencies, in addition to `pnpm audit`. The former needs an `evidence` directory for local results. The review replaced Ganache with an isolated EthereumJS EVM; it opens no network listener and uses no signing keys.
 
 The inherited source snapshot and original Render service are separate. `BASELINE.json` records the starting repository commit; this implementation does not establish completion of the new course's group submission.

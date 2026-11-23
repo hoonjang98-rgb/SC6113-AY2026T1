@@ -136,7 +136,7 @@
     });
   });
   $('transaction-button')?.addEventListener('click', () => {
-    try {location.href = `/transactions?wallet=${encodeURIComponent(C.walletAddress($('wallet').value))}`;}
+    try {location.href = `/transactions#wallet=${encodeURIComponent(C.walletAddress($('wallet').value))}`;}
     catch(error) {status(C.errorMessage(error), 'error');}
   });
   async function lookup() {
@@ -206,7 +206,9 @@
     status('Contract deployed and code verified. Save the deployment details so the site can be connected to this contract.', 'success',receipt.hash);
   }));
   if (document.body.dataset.page === 'transactions') {
-    const address = new URLSearchParams(location.search).get('wallet');
+    // Fragments stay in the browser and are not sent to Render access logs.
+    const address = new URLSearchParams(location.hash.slice(1)).get('wallet');
+    if (location.hash) history.replaceState(null, '', location.pathname);
     if (address) {$('wallet').value = address; run(lookup);}
   }
   if (document.body.dataset.page === 'setup') metadata.then(([,config]) => {

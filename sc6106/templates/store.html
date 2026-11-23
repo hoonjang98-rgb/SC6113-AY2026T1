@@ -3,9 +3,9 @@
 <h1>Store Money</h1>
 <form id="store-form" novalidate>
   <label class="sr-only" for="wallet">Wallet address</label>
-  <input id="wallet" name="wallet" placeholder="Enter wallet address" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="42" required>
+  <input id="wallet" placeholder="Enter wallet address" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="42" required>
   <label class="sr-only" for="amount">Amount in Sepolia ETH</label>
-  <input id="amount" name="amount" placeholder="Enter amount" type="text" inputmode="decimal" autocomplete="off" required>
+  <input id="amount" placeholder="Enter amount" type="text" inputmode="decimal" autocomplete="off" maxlength="80" required>
   <p class="field-note">Amount in Sepolia ETH. Only the wallet entered above can withdraw the stored ETH.</p>
   <button id="store-button" type="submit">Store</button>
 </form>

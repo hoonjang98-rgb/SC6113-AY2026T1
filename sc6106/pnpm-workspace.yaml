@@ -1,0 +1,4 @@
+overrides:
+  ws: 8.23.0
+  tmp: 0.2.7
+ignoreScripts: true

@@ -10,6 +10,7 @@
   }
   function amountWei(value) {
     const text = String(value).trim();
+    if (text.length > 80) throw Error('The amount is too large.');
     if (!/^(?:0|[1-9][0-9]*)(?:\.[0-9]{1,18})?$/.test(text)) throw Error('Enter an ETH amount with up to 18 decimal places.');
     let result;
     try { result = E.parseEther(text); } catch { throw Error('The amount is too large.'); }

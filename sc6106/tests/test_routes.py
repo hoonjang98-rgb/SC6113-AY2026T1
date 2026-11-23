@@ -29,4 +29,20 @@ class Routes(unittest.TestCase):
                 self.assertEqual(response.status_code,200,file)
         self.assertEqual(self.client.get('/.env').status_code,404)
 
+    def test_public_attack_surface(self):
+        for route in ['/.env','/.git/config','/app.py','/requirements.txt','/static/../app.py','/static/%2e%2e/app.py','/console','/debug','/node_modules/ethers/package.json']:
+            self.assertEqual(self.client.get(route).status_code,404,route)
+        self.assertEqual(self.client.get('/main',headers={'Host':'attacker.invalid'}).status_code,400)
+        self.assertEqual(self.client.post('/main',data=b'x'*16385).status_code,413)
+        self.assertEqual(self.client.get('/store?wallet=%3Cscript%3Ealert(1)%3C/script%3E').text.count('<script>alert(1)</script>'),0)
+
+    def test_privacy_and_browser_restrictions(self):
+        response=self.client.get('/store')
+        self.assertEqual(response.headers['Referrer-Policy'],'no-referrer')
+        self.assertIn("form-action 'none'",response.headers['Content-Security-Policy'])
+        self.assertIn("frame-ancestors 'none'",response.headers['Content-Security-Policy'])
+        self.assertIn('camera=()',response.headers['Permissions-Policy'])
+        self.assertNotIn('Set-Cookie',response.headers)
+        self.assertNotIn('name="wallet"',response.text)
+
 if __name__ == '__main__': unittest.main()

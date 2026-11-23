@@ -1,12 +1,20 @@
 """SC6106 pages. Wallets sign transactions; the server never handles private keys."""
 import os
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, abort, redirect, render_template, request, url_for
 
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    app.config['MAX_CONTENT_LENGTH'] = 16384
+    app.config['TRUSTED_HOSTS'] = ['sc6106-ay2026t1.onrender.com', 'localhost', '127.0.0.1']
     if test_config:
         app.config.update(test_config)
+
+    @app.before_request
+    def bounded_request():
+        # No route accepts file uploads or a transaction body.
+        if request.content_length and request.content_length > app.config['MAX_CONTENT_LENGTH']:
+            abort(413)
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
@@ -53,11 +61,13 @@ def create_app(test_config=None):
     def response_headers(response):
         response.headers['X-Content-Type-Options'] = 'nosniff'
         response.headers['X-Frame-Options'] = 'DENY'
-        response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        response.headers['Referrer-Policy'] = 'no-referrer'
+        response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), hid=()'
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000'
         response.headers['Content-Security-Policy'] = (
             "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
             "connect-src 'self' https://ethereum-sepolia-rpc.publicnode.com https://sepolia.drpc.org; "
-            "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+            "object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; worker-src 'none'"
         )
         if response.mimetype == 'text/html' or request.path.endswith('deployment.json'):
             response.headers['Cache-Control'] = 'no-store'

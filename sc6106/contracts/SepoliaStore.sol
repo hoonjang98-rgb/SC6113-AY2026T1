@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.30;
+pragma solidity 0.8.39;
 
 /// @notice A simple native-ETH vault. Each beneficiary alone can withdraw their balance.
 /// @dev No owner, upgrade mechanism, arbitrary external calls, or administrative withdrawal.
@@ -24,6 +24,11 @@ contract SepoliaStore {
     error ReentrantCall();
     error PaymentFailed();
     error UseStoreFunction();
+    error WrongNetwork();
+
+    constructor() {
+        if (block.chainid != 11155111) revert WrongNetwork();
+    }
 
     modifier nonReentrant() {
         if (entered) revert ReentrantCall();
