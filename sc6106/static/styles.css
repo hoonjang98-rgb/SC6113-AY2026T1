@@ -12,6 +12,13 @@ button:focus-visible, .button:focus-visible, input:focus-visible { outline: 3px 
 .main-card h1 { margin-bottom: 66px; }
 .main-menu { display: grid; gap: 38px; }
 .main-menu .button { min-height: 74px; font-size: 28px; }
+.invoice-card { padding: 72px 46px 52px; width: min(100%, 780px); }
+.invoice-card h1 { margin-bottom: 48px; }
+.invoice-actions { display: grid; gap: 14px; }
+.invoice-card .main-button { margin-top: 40px; }
+.invoice-summary { margin-top: 32px; color: #0853a5; font-size: clamp(18px, 4vw, 28px); font-weight: 700; text-align: center; }
+.invoice-summary p { margin: 0 0 26px; }
+.invoice-note { color: #4a5562; font-size: 13px; text-align: center; margin: 0; }
 input { display: block; width: 100%; height: 62px; border: 1px solid #c3c9cf; background: #fff; border-radius: 5px; padding: 13px 15px; margin: 0 0 16px; color: #16191e; font: 22px/1.3 Arial, sans-serif; }
 input::placeholder { color: #5a626c; opacity: 1; }
 input:focus { border-color: #17283c; }

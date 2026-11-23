@@ -6,9 +6,11 @@
   <meta name="theme-color" content="#007bff">
   <title>{{ title }} | SC6106</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  {% block scripts %}
   <script src="{{ url_for('static', filename='vendor/ethers.umd.min.js') }}" defer></script>
   <script src="{{ url_for('static', filename='core.js') }}" defer></script>
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  {% endblock %}
 </head>
 <body data-page="{{ page }}">
   <main class="card {{ page }}-card">

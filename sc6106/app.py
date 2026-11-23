@@ -49,6 +49,10 @@ def create_app(test_config=None):
     def exit_page():
         return render_template('exit.html', page='exit', title='Exit')
 
+    @app.get('/invoice')
+    def invoice():
+        return render_template('invoice.html', page='invoice', title='Invoice Tracker')
+
     @app.get('/setup')
     def setup():
         return render_template('setup.html', page='setup', title='Contract setup')

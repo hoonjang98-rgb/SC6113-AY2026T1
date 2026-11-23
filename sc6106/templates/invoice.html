@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='invoice.js') }}" defer></script>
+{% endblock %}
+{% block content %}
+<h1>Invoice Tracker</h1>
+<div class="invoice-actions" role="group" aria-label="Invoice actions" aria-describedby="invoice-note">
+  <button id="pay-invoice" type="button">Pay Invoice</button>
+  <button id="reset-invoice" type="button">Reset Invoice</button>
+  <button id="view-invoice" type="button">View Invoice</button>
+</div>
+<a class="button main-button" href="{{ url_for('main') }}">Main</a>
+<div class="invoice-summary" aria-live="polite" aria-atomic="true">
+  <p>Invoice Amount: 1000</p>
+  <p>Payment Status: <span id="invoice-payment">Unpaid</span></p>
+</div>
+<p class="invoice-note" id="invoice-note">Practice invoice. No ETH is transferred.</p>
+{% endblock %}
