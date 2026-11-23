@@ -1,0 +1,18 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const solc = require('solc');
+const {keccak256} = require('ethers');
+const root = path.resolve(__dirname, '..');
+const source = fs.readFileSync(path.join(root, 'contracts/SepoliaStore.sol'), 'utf8');
+const settings = {optimizer: {enabled: true, runs: 200}, evmVersion: 'shanghai', outputSelection: {'*': {'*': ['abi','evm.bytecode.object','evm.deployedBytecode.object']}}};
+const result = JSON.parse(solc.compile(JSON.stringify({language:'Solidity',sources:{'SepoliaStore.sol':{content:source}},settings})));
+const errors = (result.errors || []).filter(e => e.severity === 'error');
+if (errors.length) throw new Error(errors.map(e=>e.formattedMessage).join('\n'));
+const contract = result.contracts['SepoliaStore.sol'].SepoliaStore;
+const artifact = {contractName:'SepoliaStore',compiler:solc.version(),evmVersion:'shanghai',optimizerRuns:200,source,abi:contract.abi,bytecode:'0x'+contract.evm.bytecode.object,runtimeCodeHash:keccak256('0x'+contract.evm.deployedBytecode.object)};
+fs.mkdirSync(path.join(root,'static/contracts'),{recursive:true});
+fs.writeFileSync(path.join(root,'static/contracts/SepoliaStore.json'),JSON.stringify(artifact,null,2)+'\n');
+fs.mkdirSync(path.join(root,'static/vendor'),{recursive:true});
+fs.copyFileSync(path.join(root,'node_modules/ethers/dist/ethers.umd.min.js'),path.join(root,'static/vendor/ethers.umd.min.js'));
+fs.copyFileSync(path.join(root,'node_modules/ethers/LICENSE.md'),path.join(root,'static/vendor/ethers.LICENSE.md'));
+console.log(JSON.stringify({compiler:artifact.compiler,bytecodeBytes:contract.evm.bytecode.object.length/2,runtimeCodeHash:artifact.runtimeCodeHash}));

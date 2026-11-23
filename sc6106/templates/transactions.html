@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Transaction</h1>
+<form id="lookup-form" novalidate>
+  <label class="sr-only" for="wallet">Wallet address</label>
+  <input id="wallet" placeholder="Enter wallet address" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="42" required>
+  <button type="submit">View transactions</button>
+</form>
+<section id="balance-panel" class="balance-panel" hidden>
+  <p>Stored balance</p><strong id="stored-balance">0 ETH</strong>
+  <a id="vault-link" target="_blank" rel="noopener noreferrer">View store contract</a>
+</section>
+<section id="history-panel" hidden>
+  <h2>Store history</h2>
+  <p id="history-count" class="note"></p>
+  <div id="history-list"></div>
+  <button id="more-history" type="button" class="secondary" hidden>Load more</button>
+  <form id="withdraw-form" novalidate>
+    <label for="withdraw-amount">Withdraw Sepolia ETH</label>
+    <input id="withdraw-amount" placeholder="Enter amount" inputmode="decimal" autocomplete="off" type="text">
+    <button type="submit">Withdraw to my wallet</button>
+    <p class="field-note">Connect the wallet whose stored balance is shown. Withdrawal is paid only to that wallet.</p>
+  </form>
+</section>
+<a class="button main-button" href="/store">Store</a>
+<a class="button main-button" href="/main">Main</a>
+{% endblock %}

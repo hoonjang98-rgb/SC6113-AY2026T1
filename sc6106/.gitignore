@@ -1,0 +1,7 @@
+node_modules/
+.pnpm-store/
+.venv/
+.env
+__pycache__/
+evidence/
+*.log

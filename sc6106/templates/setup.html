@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Contract setup</h1>
+<p class="note">Publish the SC6106 Store contract on Ethereum Sepolia. This requires a wallet confirmation and test ETH for gas. The contract has no administrator or owner withdrawal.</p>
+<button id="deploy-button" type="button">Deploy Store contract</button>
+<section id="deployment-result" hidden>
+  <h2>Deployment confirmed</h2><pre id="deployment-output"></pre>
+</section>
+<a class="button main-button" href="/main">Main</a>
+{% endblock %}

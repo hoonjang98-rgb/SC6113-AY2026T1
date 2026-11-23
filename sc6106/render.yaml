@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: sc6106-ay2026t1
+    runtime: python
+    plan: free
+    branch: codex/sc6106-native-store
+    rootDir: sc6106
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 app:app
+    healthCheckPath: /health

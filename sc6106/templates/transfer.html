@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Transfer Money</h1>
+<form id="transfer-form" novalidate>
+  <label class="sr-only" for="wallet">Recipient wallet address</label>
+  <input id="wallet" placeholder="Enter recipient wallet address" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="42" required>
+  <label class="sr-only" for="amount">Amount in Sepolia ETH</label>
+  <input id="amount" placeholder="Enter amount" type="text" inputmode="decimal" autocomplete="off" required>
+  <p class="field-note">Send Sepolia ETH directly from your connected wallet to the recipient.</p>
+  <button type="submit">Transfer</button>
+</form>
+<a class="button main-button" href="/main">Main</a>
+{% endblock %}

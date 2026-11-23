@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Store Money</h1>
+<form id="store-form" novalidate>
+  <label class="sr-only" for="wallet">Wallet address</label>
+  <input id="wallet" name="wallet" placeholder="Enter wallet address" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="42" required>
+  <label class="sr-only" for="amount">Amount in Sepolia ETH</label>
+  <input id="amount" name="amount" placeholder="Enter amount" type="text" inputmode="decimal" autocomplete="off" required>
+  <p class="field-note">Amount in Sepolia ETH. Only the wallet entered above can withdraw the stored ETH.</p>
+  <button id="store-button" type="submit">Store</button>
+</form>
+<button id="transaction-button" type="button" class="spaced-button">Transaction</button>
+<a class="button main-button" href="/main">Main</a>
+{% endblock %}

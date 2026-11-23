@@ -1,0 +1,10 @@
+{
+  "created_on": "2026-11-23",
+  "source_repository": "https://github.com/hoonjang98-rgb/SC6113-AY2026T1",
+  "source_commit": "c87009ef09741aeb16841e108fffde1623aaf326",
+  "source_app": "Flask CourseLedger app at /main and /transferMoney",
+  "new_branch": "codex/sc6106-native-store",
+  "new_source_directory": "sc6106",
+  "requested_changes": ["SC6106 name and a new free Render service", "Reference-image Main and Store layouts", "Editable wallet address", "Real Sepolia ETH storage confirmed by the user"],
+  "implementation": "Separate working copy and new native-ETH vault; legacy CourseLedger and inherited sources remain historical."
+}

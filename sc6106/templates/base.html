@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#007bff">
+  <title>{{ title }} | SC6106</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='vendor/ethers.umd.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='core.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body data-page="{{ page }}">
+  <main class="card {{ page }}-card">
+    {% block content %}{% endblock %}
+    <p id="status" class="status" role="status" aria-live="polite" hidden></p>
+  </main>
+  <dialog id="review-dialog" aria-labelledby="review-title">
+    <h2 id="review-title">Review transaction</h2>
+    <p id="review-details" class="review-details"></p>
+    <p class="note">Ethereum Sepolia testnet. Your wallet will ask you to confirm the transaction and gas fee.</p>
+    <div class="dialog-actions"><button id="cancel-review" type="button" class="secondary">Cancel</button><button id="confirm-review" type="button">Continue to wallet</button></div>
+  </dialog>
+</body>
+</html>

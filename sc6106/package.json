@@ -1,0 +1,14 @@
+{
+  "name": "sc6106-sepolia-dapp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "compile": "node tools/compile.cjs",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "ethers": "6.15.0",
+    "ganache": "7.9.2",
+    "solc": "0.8.30"
+  }
+}
