@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-23",
+  "chainId": 11155111,
+  "network": "Ethereum Sepolia",
+  "transactionHash": "0x8a8704326fb48c11a25afee75b966634eaf53b3c56cca8aa2f36cdf459af60b7",
+  "receiptStatus": "0x1",
+  "blockNumber": 12195684,
+  "contractAddress": "0x2d1e9a642bcd104147bb53b4ffc0f010f5983a3b",
+  "transactionValueWei": "0",
+  "creationBytecodeMatchesReviewedArtifact": true,
+  "creationBytecodeBytes": 2376,
+  "deployedRuntimeCodeBytes": 2314,
+  "deployedRuntimeCodeHash": "0x2b80b1c158996c37f57381726d60db29e22c00a6219320f2f67073f93510809f",
+  "reviewedArtifactRuntimeCodeHash": "0x2b80b1c158996c37f57381726d60db29e22c00a6219320f2f67073f93510809f",
+  "runtimeCodeMatchesReviewedArtifact": true,
+  "rpc": "https://ethereum-sepolia-rpc.publicnode.com",
+  "notes": "Confirmed from public transaction, receipt, and deployed bytecode. Deployment sent no ETH value; the wallet paid Sepolia gas."
+}

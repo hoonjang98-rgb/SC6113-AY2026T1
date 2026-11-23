@@ -10,6 +10,10 @@ A separate implementation of the course practice site, based on the user's Novem
 - Withdrawal returns ETH only to the connected balance owner. Gas is paid from the wallet's external balance.
 - Main returns to the menu. Exit leaves the forms; it does not revoke wallet permissions.
 
+## Live Sepolia contract
+
+The Store contract was deployed and verified on Ethereum Sepolia on 23 November 2026. Address: `0x2d1e9a642bcd104147bb53b4ffc0f010f5983a3b`. Deployment transaction: `0x8a8704326fb48c11a25afee75b966634eaf53b3c56cca8aa2f36cdf459af60b7` (block 12195684). The transaction value was 0 ETH; the deployer paid only Sepolia gas. The submitted creation bytecode and on-chain runtime hash both match the reviewed artifact. See [deployment evidence](evidence/sepolia-deployment-2026-11-23.json).
+
 The browser validates Sepolia chain ID 11155111, exact wei amounts, account changes, and the configured contract's compiled runtime code hash. Every write displays a review dialog and requires wallet confirmation. The server never accepts or stores private keys. Read-only history uses two public Sepolia RPC endpoints. Addresses and transaction records are public on-chain.
 
 ## Local development and checks
@@ -31,12 +35,9 @@ The local page is `http://127.0.0.1:6106/main`. The compiled contract artifact a
 
 Create a new Python web service from `hoonjang98-rgb/SC6113-AY2026T1`, branch `codex/sc6106-native-store`, root directory `sc6106`, service name `sc6106-ay2026t1`, **Free** instance. Build: `pip install -r requirements.txt`. Start: `gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 app:app`. Health check: `/health`. No database, RPC key, wallet secret, or paid add-on is required. Free instances may sleep when idle.
 
-## Connect the Store contract
+## Contract setup and deployment record
 
-1. Open `/setup` in a browser with an Ethereum wallet, unlock it, and select Ethereum Sepolia with enough test ETH for deployment gas.
-2. Deploy Store contract, review the network and code hash, and confirm in the wallet. No ETH value is sent with deployment; gas is required.
-3. Record the confirmed public deployment JSON in `static/deployment.json`, publish that change to the deployment branch, and wait for Render to redeploy.
-4. Verify the runtime code matches the artifact before testing a small Store deposit and withdrawal. Local EthereumJS EVM tests are simulations, not public Sepolia transactions.
+`static/deployment.json` now points to the verified public deployment above. The `/setup` page disables deployment when this configuration is live. A small Store deposit and beneficiary withdrawal have not yet been submitted; these require separate wallet transactions and gas. Local EthereumJS EVM tests are simulations, not public Sepolia transactions.
 
 When deployment.json has a null address, Store and Transaction intentionally report that setup is unfinished. Transfer Money does not depend on the Store deployment. The public setup page cannot change the shared deployment configuration.
 

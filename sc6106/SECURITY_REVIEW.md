@@ -39,3 +39,7 @@ The Store contract remains undeployed on public Sepolia at this checkpoint (`sta
 Deposits for another address give that address withdrawal rights permanently. A mistyped valid address, lost private key, malicious extension, compromised hosting/account, or misleading wallet confirmation can still cause loss. Public RPC endpoints can log IPs and queried addresses. Amounts, sender/beneficiary addresses, balances, and transaction history are public on Ethereum. Use test funds; never enter private keys or seed phrases into the site.
 
 On the user's next follow-up, verify the deployed revision and wallet behavior again, especially the actual deployment receipt/code and deposit/withdrawal if the user chooses to finish setup. No automatic follow-up job was scheduled.
+
+## Deployment verification addendum — 23 November 2026
+
+The user later completed the Sepolia contract deployment. The public receipt for transaction `0x8a8704326fb48c11a25afee75b966634eaf53b3c56cca8aa2f36cdf459af60b7` has success status at block 12195684 and created `0x2d1e9a642bcd104147bb53b4ffc0f010f5983a3b`. Its value is 0 wei. Creation bytecode exactly matches the reviewed 2,376-byte artifact; the deployed runtime hash is `0x2b80b1c158996c37f57381726d60db29e22c00a6219320f2f67073f93510809f`, equal to the reviewed artifact hash. This confirms the public deployment only; no Store deposit or withdrawal was submitted in this verification. Receipt details are preserved in `evidence/sepolia-deployment-2026-11-23.json`.
