@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SC6106 wallet practice for the Ethereum Sepolia testnet.">
+  <title>SC6106 Sepolia Wallet</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <span class="brand">SC6106 Wallet</span>
+    <span class="network">Ethereum Sepolia</span>
+  </header>
+  <main>
+    <section class="dashboard" aria-labelledby="main-title">
+      <div class="wallet">
+        <h1 id="main-title">Main</h1>
+        <p id="account">MetaMask disconnected</p>
+        <button id="exit" type="button" class="secondary">Exit</button>
+        <a id="install" href="https://metamask.io/download/" hidden>Get MetaMask</a>
+      </div>
+      <div class="actions">
+        <button class="action" id="transfer" type="button">Transfer Money
+          <span>Send test ETH to a recipient</span>
+        </button>
+        <button class="action" id="store" type="button">Store Money
+          <span>Move test ETH to your savings wallet</span>
+        </button>
+      </div>
+      <p class="notice" id="notice" role="status" hidden></p>
+    </section>
+    <section id="transaction" class="transaction" aria-labelledby="transaction-title" hidden>
+      <div>
+        <h2 id="transaction-title">Latest transaction</h2>
+        <p id="transaction-status" role="status"></p>
+      </div>
+      <a id="explorer" target="_blank" rel="noopener noreferrer">View on Etherscan</a>
+    </section>
+  </main>
+  <dialog aria-labelledby="payment-title" aria-describedby="payment-description">
+    <form id="payment">
+      <h2 id="payment-title"></h2>
+      <p id="payment-description"></p>
+      <label for="recipient" id="recipient-label"></label>
+      <input id="recipient" placeholder="0x…" maxlength="42" required spellcheck="false" autocapitalize="off" autocomplete="off">
+      <label for="amount">Amount in Sepolia ETH</label>
+      <input id="amount" inputmode="decimal" placeholder="0.00" maxlength="31" required autocomplete="off">
+      <p id="payment-error" class="notice" role="alert" hidden></p>
+      <div class="dialog-actions">
+        <button id="cancel" type="button" class="secondary">Cancel</button>
+        <button id="review" type="submit">Review in MetaMask</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
